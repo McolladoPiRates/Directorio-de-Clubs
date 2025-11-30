@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <title>eToro Club Dashboard</title>
+    <!-- Tailwind via CDN para simplicidad. En un futuro podrías instalarlo vía npm/postcss -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -12,7 +13,6 @@
         background-color: #f8fafc;
         color: #0f172a;
       }
-      /* Custom scrollbar for tables */
       .custom-scrollbar::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -35,23 +35,15 @@
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4"
   }
 }
 </script>
-    <!-- 
-      INTEGRACIÓN CON DATOS REALES:
-      Si usas Google Apps Script u otro backend que inyecta datos, 
-      el script debería verse así antes de cargar React:
-      
-      <script>
-        // En producción, esto se reemplaza con los datos reales
-        // window.DATA = JSON.parse('<?= dataJson ?>'); 
-        window.DATA = undefined; // Por defecto undefined para usar Mock Data localmente
-      </script>
-    -->
 </head>
 <body>
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>
