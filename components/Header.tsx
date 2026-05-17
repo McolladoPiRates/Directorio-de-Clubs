@@ -1,56 +1,64 @@
-
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { DashboardData } from '../types';
-import { DEFAULT_CLUB_LOGO } from '../constants';
+import { Home, Menu, X } from 'lucide-react';
+import { COMPANY_NAME } from '../constants';
 
-interface HeaderProps {
-  data: DashboardData;
-  onBack?: () => void;
+interface Props {
+  onStart: () => void;
+  onLegal: (slug: 'privacidad' | 'aviso' | 'cookies' | 'leads') => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ data, onBack }) => {
-  const formattedDate = new Date(data.lastUpdate).toLocaleString('es-ES', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-
+const Header: React.FC<Props> = ({ onStart, onLegal }) => {
+  const [open, setOpen] = React.useState(false);
   return (
-    <header className="flex flex-col gap-6 mb-8">
-      {onBack && (
-        <button 
-          onClick={onBack}
-          className="self-start flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/50"
-        >
-          <ArrowLeft size={18} />
-          Volver al directorio
-        </button>
-      )}
-      
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="w-20 h-20 rounded-full bg-white border border-slate-200 shadow-sm overflow-hidden flex-shrink-0">
-            <img
-              src={data.clubLogo || DEFAULT_CLUB_LOGO}
-              alt="Club Logo"
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = DEFAULT_CLUB_LOGO;
-              }}
-            />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900">
-            {data.summary.club}
-          </h1>
-        </div>
-        <div className="flex items-center gap-2 text-sm bg-white/60 px-3 py-1.5 rounded-full border border-slate-200 backdrop-blur-sm">
-          <span className="text-slate-500">Actualizado:</span>
-          <span className="font-medium text-slate-700">{formattedDate}</span>
+    <header className="sticky top-0 z-30 bg-white/85 backdrop-blur border-b border-slate-100">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <a href="#top" className="flex items-center gap-2 font-bold text-slate-900">
+          <span className="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center">
+            <Home size={18} />
+          </span>
+          <span className="text-base sm:text-lg">{COMPANY_NAME}</span>
+        </a>
+
+        <nav className="hidden md:flex items-center gap-7 text-sm text-slate-600">
+          <a href="#como-funciona" className="hover:text-slate-900">Cómo funciona</a>
+          <a href="#por-que" className="hover:text-slate-900">Por qué tasamos así</a>
+          <a href="#preguntas" className="hover:text-slate-900">Preguntas frecuentes</a>
+          <button onClick={() => onLegal('privacidad')} className="hover:text-slate-900">Privacidad</button>
+        </nav>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onStart}
+            className="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-full bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 transition"
+          >
+            Tasa tu vivienda
+          </button>
+          <button
+            className="md:hidden text-slate-700 p-2"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Abrir menú"
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </div>
+
+      {open && (
+        <div className="md:hidden border-t border-slate-100 bg-white">
+          <div className="px-4 py-3 flex flex-col gap-3 text-sm text-slate-700">
+            <a href="#como-funciona" onClick={() => setOpen(false)}>Cómo funciona</a>
+            <a href="#por-que" onClick={() => setOpen(false)}>Por qué tasamos así</a>
+            <a href="#preguntas" onClick={() => setOpen(false)}>Preguntas frecuentes</a>
+            <button onClick={() => { setOpen(false); onLegal('privacidad'); }} className="text-left">Política de privacidad</button>
+            <button
+              onClick={() => { setOpen(false); onStart(); }}
+              className="mt-1 inline-flex items-center justify-center px-4 py-2 rounded-full bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 transition"
+            >
+              Tasa tu vivienda
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
