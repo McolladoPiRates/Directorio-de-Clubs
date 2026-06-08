@@ -42,7 +42,7 @@ export const NavButtons: React.FC<{
         disabled={nextDisabled || loading}
         className="inline-flex items-center gap-2 px-5 sm:px-6 py-3 rounded-full bg-brand-600 text-white font-semibold text-sm hover:bg-brand-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? 'Calculando…' : nextLabel}
+        {loading ? 'Analizando el mercado de tu zona…' : nextLabel}
         {!loading && <ArrowRight size={16} />}
       </button>
     )}

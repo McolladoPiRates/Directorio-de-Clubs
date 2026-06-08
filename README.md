@@ -8,8 +8,8 @@ Inspirada en [realadvisor.es](https://realadvisor.es/es/tasacion-vivienda-online
 
 - React 19 + TypeScript + Vite
 - Tailwind CSS (CDN)
-- `@google/genai` (Gemini 2.5 Flash) para refinar la estimación
-- Heurística determinista basada en precio medio €/m² por provincia como base
+- `@google/genai` (Gemini 2.5 Flash) con **Google Search grounding** sobre portales inmobiliarios para refinar la estimación con anuncios reales de la zona
+- Heurística determinista basada en precio medio €/m² por provincia como punto de anclaje
 - Iconos: lucide-react
 - Persistencia de leads: localStorage + webhook configurable
 
@@ -31,7 +31,7 @@ components/
     StepContact.tsx         7. Datos de contacto + consentimientos RGPD
     StepResult.tsx          Resultado + disclaimer + lead enviado
 services/
-  valuation.ts              Heurística + refinamiento Gemini
+  valuation.ts              Heurística + grounding en portales + refinamiento Gemini
   leads.ts                  Persistencia local + envío a webhook
 types.ts / constants.ts / utils.ts
 ```
@@ -41,11 +41,18 @@ types.ts / constants.ts / utils.ts
 Crea un fichero `.env.local`:
 
 ```bash
-GEMINI_API_KEY=...           # Clave de Google AI Studio. Sin ella, la app cae a heurística.
+GEMINI_API_KEY=...           # Clave de Google AI Studio. Sin ella, la app cae a heurística (sin grounding ni refinamiento IA).
 LEAD_WEBHOOK_URL=...         # URL que recibirá POST JSON con cada lead. Vacío = solo localStorage.
 COMPANY_NAME=Tu Marca SL
 COMPANY_EMAIL=hola@tu-marca.com
 ```
+
+## Cómo se calcula la valoración
+
+1. **Heurística base**: `m² × €/m² provincial × multiplicadores de tipo / estado / año / planta / orientación / extras`.
+2. **Grounding** (si hay `GEMINI_API_KEY`): Gemini 2.5 Flash hace una búsqueda con la herramienta `googleSearch` en portales públicos (Idealista, Fotocasa, Habitaclia, Pisos.com) y notas de Tinsa/INE para extraer rango €/m² real y anuncios comparables en la **ciudad/CP/provincia concretos** del usuario. Las URLs de las fuentes se devuelven y se muestran en el resultado.
+3. **Refinamiento estructurado**: una segunda llamada a Gemini, esta vez con `responseSchema`, recibe la heurística + el contexto de mercado real y devuelve un `adjustmentPct` (±15%), nivel de confianza, resumen de mercado y consejos de venta.
+4. **Fallbacks**: si el grounding falla → solo refinamiento IA. Si el refinamiento falla → heurística pura. Nunca rompe la experiencia.
 
 ## Desarrollo
 

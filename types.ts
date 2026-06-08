@@ -87,16 +87,23 @@ export interface ValuationBreakdownItem {
   detail?: string;
 }
 
+export interface GroundingSource {
+  title: string;
+  uri: string;
+}
+
 export interface ValuationResult {
   centralEur: number;
   minEur: number;
   maxEur: number;
   pricePerSqmEur: number;
   confidence: 'baja' | 'media' | 'alta';
-  source: 'heuristic' | 'gemini';
+  source: 'heuristic' | 'gemini' | 'grounded';
   marketSummary: string;
   sellingTips: string[];
   breakdown: ValuationBreakdownItem[];
+  groundingSources?: GroundingSource[];
+  marketContext?: string;
 }
 
 export interface LeadPayload {

@@ -1,8 +1,16 @@
 import React from 'react';
-import { AlertTriangle, Sparkles, Mail, CheckCircle2, Info, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Sparkles, Mail, CheckCircle2, Info, RefreshCw, Globe, ExternalLink } from 'lucide-react';
 import { COMPANY_NAME } from '../../constants';
 import type { ValuationFormData, ValuationResult } from '../../types';
 import { formatEur, formatNumber } from '../../utils';
+
+const hostnameOf = (uri: string): string => {
+  try {
+    return new URL(uri).hostname.replace(/^www\./, '');
+  } catch {
+    return uri;
+  }
+};
 
 interface Props {
   data: ValuationFormData;
@@ -53,6 +61,11 @@ const StepResult: React.FC<Props> = ({ data, valuation, webhookOk, onRestart, on
               <Sparkles size={12} /> Refinada con IA
             </span>
           )}
+          {source === 'grounded' && (
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border bg-slate-900 text-white border-slate-900">
+              <Globe size={12} /> Ajustada con anuncios reales
+            </span>
+          )}
         </div>
       </div>
 
@@ -92,6 +105,33 @@ const StepResult: React.FC<Props> = ({ data, valuation, webhookOk, onRestart, on
           ))}
         </ul>
       </div>
+
+      {valuation.groundingSources && valuation.groundingSources.length > 0 && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+          <h3 className="font-semibold text-slate-900 mb-1 flex items-center gap-2">
+            <Globe size={16} className="text-brand-600" /> Fuentes consultadas
+          </h3>
+          <p className="text-xs text-slate-500 mb-3">
+            La IA ha buscado precios reales en portales inmobiliarios y notas de mercado para ajustar la estimación a tu zona.
+          </p>
+          <ul className="flex flex-wrap gap-2">
+            {valuation.groundingSources.map((s) => (
+              <li key={s.uri}>
+                <a
+                  href={s.uri}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-700 hover:border-brand-300 hover:bg-brand-50/40 transition"
+                  title={s.title}
+                >
+                  {hostnameOf(s.uri)}
+                  <ExternalLink size={11} className="text-slate-400" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 flex gap-3">
         <AlertTriangle size={20} className="text-amber-700 flex-shrink-0 mt-0.5" />
