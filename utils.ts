@@ -12,6 +12,7 @@ export const formatNumber = (n: number, decimals = 0): string => {
   return new Intl.NumberFormat('es-ES', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
+    useGrouping: true,
   }).format(n);
 };
 

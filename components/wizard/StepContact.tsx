@@ -106,25 +106,29 @@ const StepContact: React.FC<Props> = ({ data, update, onPrev, onSubmit, loading,
           <button type="button" className="text-brand-600 underline" onClick={() => onLegal('aviso')}>
             Aviso legal
           </button>
-          . Entiendo que la valoración es orientativa y no sustituye una tasación oficial.
+          .
         </Consent>
 
         <Consent
           checked={cons.comerciales}
           onChange={(v) => setConsent({ comerciales: v })}
         >
-          Acepto recibir comunicaciones comerciales sobre tasaciones, novedades del servicio y consejos para vender mi vivienda.
+          Acepto recibir comunicaciones según se describe en la{' '}
+          <button type="button" className="text-brand-600 underline" onClick={() => onLegal('privacidad')}>
+            Política de privacidad
+          </button>
+          .
         </Consent>
 
         <Consent
           checked={cons.cesionInmobiliarias}
           onChange={(v) => setConsent({ cesionInmobiliarias: v })}
         >
-          Autorizo la{' '}
+          Autorizo el tratamiento y la{' '}
           <button type="button" className="text-brand-600 underline" onClick={() => onLegal('leads')}>
-            cesión de mis datos
+            cesión de mis datos a terceros colaboradores
           </button>{' '}
-          a una inmobiliaria colaboradora con cobertura en mi zona para recibir una valoración presencial gratuita y propuestas comerciales.
+          en los términos detallados en dicha política.
         </Consent>
       </div>
 

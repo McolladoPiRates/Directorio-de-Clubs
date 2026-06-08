@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, Sparkles, Mail, PhoneCall, CheckCircle2, Info, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Sparkles, Mail, CheckCircle2, Info, RefreshCw } from 'lucide-react';
 import { COMPANY_NAME } from '../../constants';
 import type { ValuationFormData, ValuationResult } from '../../types';
 import { formatEur, formatNumber } from '../../utils';
@@ -105,26 +105,11 @@ const StepResult: React.FC<Props> = ({ data, valuation, webhookOk, onRestart, on
         </div>
       </div>
 
-      {data.consentimientos.cesionInmobiliarias && (
-        <div className="rounded-2xl border border-brand-200 bg-brand-50 p-5 flex gap-3">
-          <PhoneCall size={20} className="text-brand-700 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-brand-900 leading-relaxed">
-            <p className="font-semibold mb-1">Próximo paso: valoración presencial gratuita</p>
-            <p>
-              Has autorizado que una inmobiliaria colaboradora con cobertura en <strong>{data.direccion.provincia || 'tu provincia'}</strong> te contacte
-              para ofrecerte una valoración presencial sin coste y propuestas para vender. Recibirás un email con los datos identificativos de la inmobiliaria antes
-              de que te contacten. Puedes revocar este consentimiento en cualquier momento desde nuestra{' '}
-              <button onClick={() => onLegal('leads')} className="underline">política de cesión de datos</button>.
-            </p>
-          </div>
-        </div>
-      )}
-
       <div className="rounded-2xl bg-slate-50 border border-slate-200 p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3 text-sm text-slate-600">
           <Mail size={16} className="text-brand-600" />
           {webhookOk
-            ? <span>Hemos recibido tu solicitud y te enviaremos el informe completo a <strong>{data.contacto.email}</strong>.</span>
+            ? <span>Hemos guardado tu solicitud y te enviaremos el informe a <strong>{data.contacto.email}</strong>.</span>
             : <span>Guardamos tu solicitud. Si en unos minutos no llega el email, escríbenos.</span>}
         </div>
         <button

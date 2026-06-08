@@ -13,7 +13,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: '¿Por qué necesitáis mis datos de contacto?',
-    a: 'Para enviarte el informe de tasación al email y, si lo autorizas, para que una inmobiliaria colaboradora pueda contactarte con una valoración presencial y propuestas comerciales. Tú decides qué autorizas en cada paso.',
+    a: 'Para enviarte el informe de tasación a tu email y para los fines descritos en nuestra Política de privacidad. Tú decides qué consentimientos marcas al final del formulario.',
   },
   {
     q: '¿Qué hacéis con mi información?',

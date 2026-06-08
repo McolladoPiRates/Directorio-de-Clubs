@@ -8,31 +8,32 @@ import {
   TYPE_MULTIPLIER,
 } from '../constants';
 import type { Extras, ValuationFormData, ValuationResult, ValuationBreakdownItem } from '../types';
+import { formatNumber } from '../utils';
 
 const yearMultiplier = (year: number | null): number => {
   if (!year) return 1.0;
-  if (year < 1950) return 0.9;
-  if (year < 1980) return 0.95;
+  if (year < 1950) return 0.92;
+  if (year < 1980) return 0.96;
   if (year < 2000) return 1.0;
-  if (year < 2010) return 1.04;
-  return 1.08;
+  if (year < 2010) return 1.05;
+  return 1.1;
 };
 
 const floorMultiplier = (planta: number | null): number => {
   if (planta === null || planta === undefined) return 1.0;
   if (planta <= 0) return 0.95;
   if (planta <= 3) return 1.0;
-  if (planta <= 6) return 1.02;
-  return 1.05;
+  if (planta <= 6) return 1.03;
+  return 1.06;
 };
 
 const orientationMultiplier = (o: ValuationFormData['orientacion']): number => {
   switch (o) {
     case 'sur':
-      return 1.03;
+      return 1.04;
     case 'este':
     case 'oeste':
-      return 1.01;
+      return 1.015;
     default:
       return 1.0;
   }
@@ -59,11 +60,11 @@ export const computeHeuristicValuation = (form: ValuationFormData): ValuationRes
     basePricePerSqm * typeMult * condMult * yearMult * floorMult * orientMult * (1 + extrasPct);
 
   const central = Math.max(0, Math.round((m2 * adjustedPricePerSqm) / 100) * 100);
-  const min = Math.round((central * 0.92) / 100) * 100;
-  const max = Math.round((central * 1.1) / 100) * 100;
+  const min = Math.round((central * 0.93) / 100) * 100;
+  const max = Math.round((central * 1.12) / 100) * 100;
 
   const breakdown: ValuationBreakdownItem[] = [
-    { label: 'Precio medio en la zona', impactPct: 0, detail: `${Math.round(basePricePerSqm)} €/m² en ${form.direccion.provincia || 'tu provincia'}` },
+    { label: 'Precio medio en la zona', impactPct: 0, detail: `${formatNumber(Math.round(basePricePerSqm))} €/m² en ${form.direccion.provincia || 'tu provincia'}` },
     { label: 'Tipo de vivienda', impactPct: (typeMult - 1) * 100 },
     { label: 'Estado de conservación', impactPct: (condMult - 1) * 100 },
     { label: 'Antigüedad', impactPct: (yearMult - 1) * 100 },
@@ -195,8 +196,8 @@ ${JSON.stringify(context, null, 2)}`;
 
     const adj = Math.max(-10, Math.min(10, Number(parsed.adjustmentPct) || 0));
     const central = Math.round((base.centralEur * (1 + adj / 100)) / 100) * 100;
-    const min = Math.round((central * 0.92) / 100) * 100;
-    const max = Math.round((central * 1.1) / 100) * 100;
+    const min = Math.round((central * 0.93) / 100) * 100;
+    const max = Math.round((central * 1.12) / 100) * 100;
 
     return {
       ...base,
